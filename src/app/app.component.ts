@@ -1,6 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {MatIconRegistry} from "@angular/material/icon";
+import {LayoutService} from "./layout/layout.service";
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ import {MatIconRegistry} from "@angular/material/icon";
 })
 export class AppComponent implements OnInit{
   matIconReg = inject(MatIconRegistry);
+  layoutService = inject(LayoutService); // run constructor
 
   ngOnInit(): void {
     this.matIconReg.setDefaultFontSetClass('material-symbols-outlined');
