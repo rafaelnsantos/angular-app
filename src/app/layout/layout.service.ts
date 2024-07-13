@@ -15,7 +15,7 @@ export class LayoutService {
 
   constructor() {
     this.loadTheme()
-    this.isMobile.set(window.innerWidth < 640)
+    this.refreshIsMobile()
     this.sidebarOpen.set(this.isDesktop())
 
     effect(() => {
@@ -27,7 +27,7 @@ export class LayoutService {
     fromEvent(window, 'resize')
       .pipe(takeUntilDestroyed())
       .subscribe(() => {
-        this.isMobile.set(window.innerWidth < 640)
+        this.refreshIsMobile()
         this.refreshHeaderHeight()
       })
 
@@ -55,6 +55,9 @@ export class LayoutService {
     }
   }
 
+  private refreshIsMobile() {
+    this.isMobile.set(window.innerWidth < 640)
+  }
   private refreshHeaderHeight() {
     const header = this.headerRef()
 
