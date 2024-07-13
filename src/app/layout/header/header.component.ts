@@ -1,14 +1,18 @@
 import {Component, ElementRef, inject, OnInit} from '@angular/core';
 import {LayoutService} from "../layout.service";
 import {MatIconModule} from "@angular/material/icon";
-import {ToggleMenuButtonComponent} from "../components/toggle-menu-button/toggle-menu-button.component";
+import {ToggleSidebarButtonComponent} from "../components/toggle-sidebar-button/toggle-sidebar-button.component";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {ButtonModule} from "primeng/button";
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
     MatIconModule,
-    ToggleMenuButtonComponent
+    ToggleSidebarButtonComponent,
+    MatProgressBarModule,
+    ButtonModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
