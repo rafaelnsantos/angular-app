@@ -1,7 +1,7 @@
 <app-header />
 
 <div class="h-1">
-  @if(!loadingService.isLoading()) {
+  @if(loadingService.isLoading()) {
     <mat-progress-bar mode="indeterminate"/>
   }
 </div>
