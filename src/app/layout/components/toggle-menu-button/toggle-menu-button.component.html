@@ -1,0 +1,9 @@
+<button pButton (click)="layoutService.toggleSidebar()">
+  <mat-icon>
+    @if(layoutService.sidebarOpen()) {
+      close
+    } @else {
+      menu
+    }
+  </mat-icon>
+</button>

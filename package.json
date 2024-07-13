@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --host 0.0.0.0",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -21,8 +21,10 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "@angular/service-worker": "^17.3.0",
+    "primeicons": "^7.0.0",
     "primeng": "^17.18.4",
     "rxjs": "~7.8.0",
+    "subsink": "^1.0.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },

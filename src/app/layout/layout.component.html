@@ -1,0 +1,23 @@
+<app-header />
+
+<mat-drawer-container
+  [hasBackdrop]="layoutService.isMobile()"
+  [style.height]="layoutService.containerHeight()"
+  (backdropClick)="layoutService.sidebarOpen.set(false)"
+>
+  <mat-drawer
+    [mode]="layoutService.isDesktop() ? 'side' : 'over'"
+    [opened]="layoutService.sidebarOpen()"
+    [class]="layoutService.isMobile() ? '!w-10/12' : '!w-3/12'"
+  >
+    <app-sidebar />
+  </mat-drawer>
+
+  <mat-drawer-content class="!flex flex-col">
+    <div class="flex flex-1">
+      <router-outlet />
+    </div>
+    <app-footer />
+  </mat-drawer-content>
+
+</mat-drawer-container>
