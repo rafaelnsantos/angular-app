@@ -1,9 +1,9 @@
-<button pButton (click)="layoutService.toggleSidebar()">
+<button pButton (click)="onButtonClick.emit()">
   <mat-icon>
-    @if(layoutService.sidebarOpen()) {
-      close
+    @if(isOpen()) {
+      {{ iconClose() }}
     } @else {
-      menu
+      {{ icon() }}
     }
   </mat-icon>
 </button>

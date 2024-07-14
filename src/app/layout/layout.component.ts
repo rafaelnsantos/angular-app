@@ -24,5 +24,9 @@ import {LoadingService} from "../../shared/services/loading/loading.service";
 })
 export class LayoutComponent {
   layoutService = inject(LayoutService)
-  loadingService = inject(LoadingService)
+
+  onBackdropClick() {
+    this.layoutService.sidebarOpen.set(false)
+    this.layoutService.sidebarRightOpen.set(false)
+  }
 }

@@ -1,28 +1,35 @@
-<app-header />
-
-<div class="h-1">
-  @if(loadingService.isLoading()) {
-    <mat-progress-bar mode="indeterminate"/>
-  }
-</div>
-
 <mat-drawer-container
+  [style.height]="'100dvh'"
   [hasBackdrop]="layoutService.isMobile()"
-  [style.height]="layoutService.containerHeight()"
-  (backdropClick)="layoutService.sidebarOpen.set(false)"
+  (backdropClick)="onBackdropClick()"
 >
   <mat-drawer
-    [mode]="layoutService.isDesktop() ? 'side' : 'over'"
+    [mode]="layoutService.isMobile() ? 'push' : 'side'"
     [opened]="layoutService.sidebarOpen()"
-    [class]="layoutService.isMobile() ? '!w-10/12' : '!w-3/12'"
+    [class]="layoutService.isMobile() ? '!w-10/12' : '!w-72'"
   >
     <app-sidebar />
   </mat-drawer>
 
-  <mat-drawer-content class="!flex flex-col">
-    <div class="flex flex-1">
+  <mat-drawer
+    [mode]="layoutService.isMobile() ? 'push' : 'side'"
+    [opened]="layoutService.sidebarRightOpen()"
+    [class]="layoutService.isMobile() ? '!w-10/12' : '!w-72'"
+    position="end"
+  >
+    <app-sidebar />
+  </mat-drawer>
+
+
+  <mat-drawer-content class="!flex flex-col"
+    [class.!overflow-x-hidden]="(layoutService.sidebarOpen() || layoutService.sidebarRightOpen()) && layoutService.isMobile()"
+  >
+    <app-header/>
+
+    <div class="flex flex-1 py-16 sm:py-20 px-4">
       <router-outlet />
     </div>
+
     <app-footer />
   </mat-drawer-content>
 

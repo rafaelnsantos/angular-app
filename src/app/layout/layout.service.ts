@@ -1,38 +1,46 @@
-import {computed, effect, ElementRef, Injectable, signal} from '@angular/core';
-import {fromEvent} from "rxjs";
+import {computed, Injectable, signal} from '@angular/core';
+import {debounceTime, fromEvent} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+
+const DESKTOP_WIDTH = 18 // rem
 
 @Injectable({
   providedIn: 'root'
 })
 export class LayoutService {
   sidebarOpen = signal(false)
-  headerHeight = signal(48)
-  containerHeight = computed(() => `calc(100dvh - ${this.headerHeight()}px)`)
+  sidebarRightOpen = signal(false)
   isMobile = signal(true)
   isDesktop = computed(() => !this.isMobile())
-  headerRef = signal<ElementRef<HTMLDivElement> | null>(null)
+
+  width = computed(() => this.isDesktop() ?
+    `calc(100% - ${this.sidebarOpen() ? DESKTOP_WIDTH : 0}rem - ${this.sidebarRightOpen() ? DESKTOP_WIDTH : 0}rem)`
+    : '100%'
+  )
 
   constructor() {
     this.loadTheme()
     this.refreshIsMobile()
     this.sidebarOpen.set(this.isDesktop())
 
-    effect(() => {
-      this.refreshHeaderHeight()
-    }, {
-      allowSignalWrites: true
-    })
-
     fromEvent(window, 'resize')
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        takeUntilDestroyed(),
+        debounceTime(100)
+      )
       .subscribe(() => {
         this.refreshIsMobile()
-        this.refreshHeaderHeight()
+        if (this.isMobile()) {
+          this.sidebarOpen.set(false)
+          this.sidebarRightOpen.set(false)
+        }
       })
 
     fromEvent(window.matchMedia('(prefers-color-scheme: dark)'), 'change')
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        takeUntilDestroyed(),
+        debounceTime(100)
+      )
       .subscribe((event) => {
         this.loadTheme((event as MediaQueryListEvent).matches)
       })
@@ -40,6 +48,10 @@ export class LayoutService {
 
   toggleSidebar() {
     this.sidebarOpen.update((value) => !value)
+  }
+
+  toggleSidebarRight() {
+    this.sidebarRightOpen.update((value) => !value)
   }
 
   private loadTheme(prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -57,12 +69,5 @@ export class LayoutService {
 
   private refreshIsMobile() {
     this.isMobile.set(window.innerWidth < 640)
-  }
-  private refreshHeaderHeight() {
-    const header = this.headerRef()
-
-    if (header) {
-      this.headerHeight.set(header.nativeElement.offsetHeight)
-    }
   }
 }

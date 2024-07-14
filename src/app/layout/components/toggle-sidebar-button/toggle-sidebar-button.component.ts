@@ -1,6 +1,5 @@
-import { Component, inject } from '@angular/core';
+import {Component, input, output} from '@angular/core';
 import {ButtonModule} from "primeng/button";
-import {LayoutService} from "../../layout.service";
 import {MatIconModule} from "@angular/material/icon";
 
 @Component({
@@ -14,5 +13,9 @@ import {MatIconModule} from "@angular/material/icon";
   styleUrl: './toggle-sidebar-button.component.scss'
 })
 export class ToggleSidebarButtonComponent {
-  layoutService = inject(LayoutService)
+  iconClose = input<string>('close')
+  icon = input.required<string>()
+  isOpen = input.required<boolean>()
+
+  onButtonClick = output()
 }
