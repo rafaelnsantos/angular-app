@@ -10,6 +10,10 @@ module.exports = {
         'md': '960px',
         'lg': '1280px',
         'xl': '1920px',
+      },
+      colors: {
+        'primary': 'var(--primary-color)',
+        'gray': 'var(--surface-300)',
       }
     },
   },

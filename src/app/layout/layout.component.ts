@@ -6,7 +6,7 @@ import {SidebarComponent} from "./sidebar/sidebar.component";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import { LayoutService } from './layout.service';
 import {MatProgressBar} from "@angular/material/progress-bar";
-import {LoadingService} from "../../shared/services/loading/loading.service";
+import {SidebarRightComponent} from "./sidebar-right/sidebar-right.component";
 
 @Component({
   selector: 'app-layout',
@@ -18,6 +18,7 @@ import {LoadingService} from "../../shared/services/loading/loading.service";
     RouterOutlet,
     MatSidenavModule,
     MatProgressBar,
+    SidebarRightComponent,
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
@@ -28,5 +29,9 @@ export class LayoutComponent {
   onBackdropClick() {
     this.layoutService.sidebarOpen.set(false)
     this.layoutService.sidebarRightOpen.set(false)
+  }
+
+  teste() {
+    console.log(1)
   }
 }

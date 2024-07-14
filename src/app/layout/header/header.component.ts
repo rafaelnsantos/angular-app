@@ -6,6 +6,7 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ButtonModule} from "primeng/button";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {LoadingService} from "../../../shared/services/loading/loading.service";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -15,7 +16,8 @@ import {LoadingService} from "../../../shared/services/loading/loading.service";
     ToggleSidebarButtonComponent,
     MatProgressBarModule,
     ButtonModule,
-    MatToolbarModule
+    MatToolbarModule,
+    RouterLink
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

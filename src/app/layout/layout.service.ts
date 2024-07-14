@@ -12,6 +12,7 @@ export class LayoutService {
   sidebarRightOpen = signal(false)
   isMobile = signal(true)
   isDesktop = computed(() => !this.isMobile())
+  title = signal('MonxTech')
 
   width = computed(() => this.isDesktop() ?
     `calc(100% - ${this.sidebarOpen() ? DESKTOP_WIDTH : 0}rem - ${this.sidebarRightOpen() ? DESKTOP_WIDTH : 0}rem)`
@@ -68,6 +69,6 @@ export class LayoutService {
   }
 
   private refreshIsMobile() {
-    this.isMobile.set(window.innerWidth < 640)
+    this.isMobile.set(window.innerWidth < 960)
   }
 }

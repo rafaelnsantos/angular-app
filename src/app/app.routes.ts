@@ -1,16 +1,12 @@
 import { Routes } from '@angular/router';
 import {LayoutComponent} from "./layout/layout.component";
+import {dashboardRoutes} from "./pages/dashboard.routes";
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'app',
     component: LayoutComponent,
-    children: [
-      {
-        path: '',
-        loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
-      }
-    ]
+    children: dashboardRoutes
   },
   {
     path: 'not-found',
@@ -18,6 +14,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/not-found'
+    redirectTo: 'app',
   }
 ];

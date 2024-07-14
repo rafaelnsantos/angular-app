@@ -1,4 +1,21 @@
-<button pButton class="flex flex-col justify-center items-center px-4 py-2 gap-1">
-  <mat-icon>{{icon()}}</mat-icon>
-  <span class="text-xs">{{label()}}</span>
-</button>
+@if (href()) {
+  <a
+    class="flex flex-1 h-full flex-col gap-0.5 justify-center items-center"
+    routerLinkActive
+    #rla="routerLinkActive"
+    [routerLink]="[href()]"
+    [class.text-primary]="rla.isActive"
+    [style.font-variation-settings]="rla.isActive ? '\'FILL\' 1, \'wght\' 200' :  '\'wght\' 200'"
+  >
+    <mat-icon>{{icon()}}</mat-icon>
+    <span class="text-xs">{{label()}}</span>
+  </a>
+} @else {
+  <div
+    class="flex flex-1 h-full flex-col gap-0.5 justify-center items-center text-gray"
+    [style.font-variation-settings]="'\'wght\' 200'"
+  >
+    <mat-icon>{{icon()}}</mat-icon>
+    <span class="text-xs">{{label()}}</span>
+  </div>
+}
