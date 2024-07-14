@@ -14,6 +14,9 @@ module.exports = {
       colors: {
         'primary': 'var(--primary-color)',
         'gray': 'var(--surface-300)',
+        'surface-ground': 'var(--surface-ground)',
+        'surface-border': 'var(--surface-border)',
+        'surface-hover': 'var(--surface-hover)',
       }
     },
   },

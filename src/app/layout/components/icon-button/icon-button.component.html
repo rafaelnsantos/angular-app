@@ -5,17 +5,19 @@
     #rla="routerLinkActive"
     [routerLink]="[href()]"
     [class.text-primary]="rla.isActive"
-    [style.font-variation-settings]="rla.isActive ? '\'FILL\' 1, \'wght\' 200' :  '\'wght\' 200'"
   >
-    <mat-icon>{{icon()}}</mat-icon>
+    <app-icon
+      [fill]="rla.isActive"
+    >
+      {{icon()}}
+    </app-icon>
     <span class="text-xs">{{label()}}</span>
   </a>
 } @else {
   <div
     class="flex flex-1 h-full flex-col gap-0.5 justify-center items-center text-gray"
-    [style.font-variation-settings]="'\'wght\' 200'"
   >
-    <mat-icon>{{icon()}}</mat-icon>
+    <app-icon>{{icon()}}</app-icon>
     <span class="text-xs">{{label()}}</span>
   </div>
 }
