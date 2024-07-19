@@ -1,24 +1,23 @@
+const { fontFamily } = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
+  mode: process.env.TAILWIND_MODE ? 'jit' : undefined,
+  purge: [
+    "./src/**/*.{html,ts,scss}",
   ],
   theme: {
-    extend: {
-      screens: {
-        'sm': '600px',
-        'md': '960px',
-        'lg': '1280px',
-        'xl': '1920px',
-      },
-      colors: {
-        'primary': 'var(--primary-color)',
-        'gray': 'var(--surface-300)',
-        'surface-ground': 'var(--surface-ground)',
-        'surface-border': 'var(--surface-border)',
-        'surface-hover': 'var(--surface-hover)',
-      }
+    fontFamily: {
+      ...fontFamily,
+      sans: ["Roboto", "Helvetica Neue", "sans-serif", ...fontFamily.sans],
     },
+    screens: {
+      'sm': '600px',
+      'md': '960px',
+      'lg': '1280px',
+      'xl': '1920px',
+    },
+    // TODO: Add material color palette
   },
   plugins: [],
 };

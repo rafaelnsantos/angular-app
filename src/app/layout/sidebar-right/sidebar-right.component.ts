@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-sidebar-right',
@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './sidebar-right.component.scss'
 })
 export class SidebarRightComponent {
+
 
 }

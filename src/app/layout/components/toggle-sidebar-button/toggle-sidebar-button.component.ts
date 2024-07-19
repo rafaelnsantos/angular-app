@@ -1,12 +1,12 @@
 import {Component, input, output} from '@angular/core';
-import {ButtonModule} from "primeng/button";
 import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-toggle-sidebar-button',
   standalone: true,
   imports: [
-    ButtonModule,
+    MatButtonModule,
     MatIconModule
   ],
   templateUrl: './toggle-sidebar-button.component.html',

@@ -1,3 +1,15 @@
-:host {
-  @apply w-full;
+.content {
+  display: grid;
+
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'header'
+    'content'
+    'footer';
+
+  height: 100dvh;
+}
+
+main {
+  grid-area: content;
 }

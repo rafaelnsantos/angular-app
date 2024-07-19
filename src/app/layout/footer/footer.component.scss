@@ -1,3 +1,4 @@
 :host {
-  @apply relative z-10;
+  grid-area: footer;
+  @apply sticky bottom-0;
 }

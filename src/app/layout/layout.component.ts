@@ -1,12 +1,14 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {HeaderComponent} from "./header/header.component";
-import {RouterOutlet} from "@angular/router";
 import {FooterComponent} from "./footer/footer.component";
-import {SidebarComponent} from "./sidebar/sidebar.component";
-import {MatSidenavModule} from "@angular/material/sidenav";
-import { LayoutService } from './layout.service';
-import {MatProgressBar} from "@angular/material/progress-bar";
+import {SidebarLeftComponent} from "./sidebar-left/sidebar-left.component";
 import {SidebarRightComponent} from "./sidebar-right/sidebar-right.component";
+import {RouterOutlet} from "@angular/router";
+import {LayoutService} from "./layout.service";
+import {DimensionsService} from "./dimensions.service";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {AuthComponent} from "./components/auth/auth.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-layout',
@@ -14,24 +16,26 @@ import {SidebarRightComponent} from "./sidebar-right/sidebar-right.component";
   imports: [
     HeaderComponent,
     FooterComponent,
-    SidebarComponent,
+    SidebarLeftComponent,
+    SidebarRightComponent,
     RouterOutlet,
     MatSidenavModule,
-    MatProgressBar,
-    SidebarRightComponent,
   ],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.scss'
+  styleUrl: './layout.component.scss',
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
   layoutService = inject(LayoutService)
+  dimensionsService = inject(DimensionsService)
+  dialogService = inject(MatDialog)
 
-  onBackdropClick() {
-    this.layoutService.sidebarOpen.set(false)
-    this.layoutService.sidebarRightOpen.set(false)
-  }
-
-  teste() {
-    console.log(1)
+  ngOnInit(): void {
+    this.dialogService.open(AuthComponent, {
+      disableClose: false,
+      maxWidth: '400px',
+      width: '100%',
+      autoFocus: true,
+      hasBackdrop: true,
+    })
   }
 }

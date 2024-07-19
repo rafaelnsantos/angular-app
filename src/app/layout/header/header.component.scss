@@ -1,3 +1,4 @@
 :host {
-  @apply relative shadow-md z-10;
+  grid-area: header;
+  @apply sticky top-0;
 }

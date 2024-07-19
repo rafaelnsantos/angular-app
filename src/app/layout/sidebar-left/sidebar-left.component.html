@@ -1,4 +1,4 @@
-@for (item of menuItems; track item.routerLink) {
+@for (item of layoutService.menuItems(); track item.routerLink) {
   <a
     routerLinkActive #rla="routerLinkActive"
     [routerLink]="item.routerLink"

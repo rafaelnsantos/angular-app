@@ -1,11 +1,11 @@
 :host {
-  @apply flex;
+  @apply flex flex-col;
 
-  width: 300px;
+  width: 320px;
 }
 
 @media screen and (max-width: 960px) {
   :host {
-    width: 80dvw;
+    width: 85dvw;
   }
 }

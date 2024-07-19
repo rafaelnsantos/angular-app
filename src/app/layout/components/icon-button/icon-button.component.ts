@@ -1,6 +1,5 @@
 import {Component, input} from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
-import {ButtonModule} from "primeng/button";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {IconComponent} from "../icon/icon.component";
 
@@ -9,7 +8,6 @@ import {IconComponent} from "../icon/icon.component";
   standalone: true,
   imports: [
     MatIconModule,
-    ButtonModule,
     RouterLink,
     RouterLinkActive,
     IconComponent
