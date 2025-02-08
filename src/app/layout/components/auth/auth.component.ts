@@ -1,19 +1,20 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, computed, inject, signal} from '@angular/core';
 import { CommonModule } from "@angular/common";
 import {
+  AbstractControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  ValidatorFn,
   Validators
 } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
-import { RouterLink } from "@angular/router";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import {WebAuthnService} from "../../../../shared/services/webauthn/web-authn.service";
+import { WebAuthnService } from '../../../../shared/services/webauthn/web-authn.service';
 
 @Component({
   selector: 'app-auth',
@@ -25,7 +26,6 @@ import {WebAuthnService} from "../../../../shared/services/webauthn/web-authn.se
     MatFormFieldModule,
     MatButtonModule,
     MatCardModule,
-    RouterLink,
     MatIconModule,
     MatDialogModule,
     MatSlideToggleModule,
@@ -35,12 +35,12 @@ import {WebAuthnService} from "../../../../shared/services/webauthn/web-authn.se
 })
 export class AuthComponent {
   private readonly formBuilder = inject(NonNullableFormBuilder)
-  readonly webAuthnService = inject(WebAuthnService)
+  private readonly webAuthnService = inject(WebAuthnService)
 
-  readonly isRegister = signal(true)
+  readonly isRegister = signal(false)
 
   readonly form = this.formBuilder.group({
-    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required, Validators.email]],
   })
 
   onClickToggleSign() {
@@ -48,25 +48,14 @@ export class AuthComponent {
   }
 
   onSubmit() {
-    const form = this.form
-
-    if (!form.valid || !this.webAuthnService.isAvailable) {
-      return
+    if (this.isRegister()) {
+      this.webAuthnService.register({
+        username: this.form.value.username!,
+      })
+    } else {
+      this.webAuthnService.login({
+        username: this.form.value.username!,
+      })
     }
-    const user = { name: form.value.email!, displayName: form.value.email! }
-
-    const test = this.isRegister() ?
-      this.webAuthnService.register(user) :
-      this.webAuthnService.login(user)
-
-    test.subscribe({
-      next: (response) => {
-        console.log('response', response)
-      },
-
-      error: (error) => {
-        console.error('error', error)
-      }
-    })
   }
 }

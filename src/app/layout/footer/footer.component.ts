@@ -14,6 +14,5 @@ import {LayoutService} from "../layout.service";
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent {
-  layoutService = inject(LayoutService)
 
 }

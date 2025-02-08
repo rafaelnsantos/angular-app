@@ -16,7 +16,7 @@ import {IconComponent} from "../icon/icon.component";
   styleUrl: './icon-button.component.scss'
 })
 export class IconButtonComponent {
-  icon = input.required()
-  label = input.required()
-  href = input.required()
+  icon = input.required<string>()
+  label = input.required<string>()
+  href = input.required<string>()
 }

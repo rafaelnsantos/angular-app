@@ -1,101 +1,122 @@
-import {inject, Injectable, InjectionToken} from '@angular/core';
+import {computed, effect, inject, Injectable, InjectionToken, signal} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {bufferToBase64, decodeBase64Url} from "./utils/buffer.utils";
-import {map, switchMap} from "rxjs";
-import {createCredential, getCredential} from "./utils/credential.utils";
-
-export const ROTAS_TOKEN = new InjectionToken<Routes>('rotas')
-
-interface Routes {
-  register: string,
-  login: string,
-  callback: string,
-}
+import { map, switchMap, take} from "rxjs";
+import {
+  ILoginCredential,
+  IRegisterCredential,
+  CredentialUtils
+} from "./utils/credential.utils";
+import {environment} from "../../../environments/environment";
 
 const httpOptions = {
   withCredentials: true,
 };
 
 interface Input {
-  name: string,
-  displayName: string
+  username: string,
+  displayName?: string
+}
+
+export interface TokensDto {
+  token: string,
+  refreshToken: string
+}
+
+const TOKEN_KEY = 'token'
+
+const WEBAUTHN_URLS = {
+  register: '/q/webauthn/register-options-challenge',
+  register2: '/webauthn/register',
+  login: '/q/webauthn/login-options-challenge',
+  login2: '/webauthn/login',
+  logout: '/q/webauthn/logout'
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebAuthnService {
-  private readonly rotas = inject(ROTAS_TOKEN)
   private readonly http = inject(HttpClient)
   readonly isAvailable = !!navigator.credentials && (!!navigator.credentials.create || !!navigator.credentials.get);
-
-  registerOnly(user: Input) {
-    return this.http.post(this.rotas.register, user, httpOptions).pipe(
-      map((response: any) => {
-        response.challenge = decodeBase64Url(response.challenge)
-        response.user.id = decodeBase64Url(response.user.id)
-        return response
-      }),
-      switchMap((response) => createCredential(response)),
-      map((credential: any) => {
-        return {
-          id: credential.id,
-          rawId: bufferToBase64(credential.rawId),
-          response: {
-            attestationObject: bufferToBase64(credential.response.attestationObject),
-            clientDataJSON: bufferToBase64(credential.response.clientDataJSON)
-          },
-          type: credential.type,
-        }
-      }),
-    )
-  }
+  token = signal(localStorage.getItem(TOKEN_KEY))
+  isSignedIn = computed(() => !!this.token());
 
   register(user: Input) {
-    return this.registerOnly(user).pipe(
-      switchMap((credential) => this.http.post(this.rotas.callback, credential, httpOptions)),
-    )
-  }
-
-  loginOnly(user: Input) {
-    return this.http.post(this.rotas.login, user, httpOptions)
-      .pipe(
-        map((res: any) => {
-          res.challenge = decodeBase64Url(res.challenge);
-          if (res.allowCredentials) {
-            for (let i = 0; i < res.allowCredentials.length; i++) {
-              res.allowCredentials[i].id = decodeBase64Url(res.allowCredentials[i].id);
-            }
-          }
-          return res;
-        }),
-        switchMap((res) => getCredential(res)),
-        map((credential: any) => {
-          return {
-            id: credential.id,
-            rawId: bufferToBase64(credential.rawId),
-            response: {
-              clientDataJSON: bufferToBase64(credential.response.clientDataJSON),
-              authenticatorData: bufferToBase64(credential.response.authenticatorData),
-              signature: bufferToBase64(credential.response.signature),
-              userHandle: bufferToBase64(credential.response.userHandle),
-            },
-            type: credential.type
-          };
-        })
-      )
+    this.http.get(environment.api.url + WEBAUTHN_URLS.register, {
+      ...httpOptions,
+      params: { ...user }
+    }).pipe(
+      map(CredentialUtils.createPublicKey),
+      switchMap(CredentialUtils.$createRegisterCredential),
+      switchMap((credential) => this.$registerCallback(credential, user.username)),
+      take(1)
+    ).subscribe({
+      next: (token) => {
+        localStorage.setItem(TOKEN_KEY, token.token);
+        this.token.set(token.token);
+      },
+      error: console.error
+    })
   }
 
   login(user: Input) {
-    return this.loginOnly(user).pipe(
-      switchMap((credential) => this.http.post(this.rotas.callback, credential, httpOptions)),
-    )
+    this.http.get(environment.api.url + WEBAUTHN_URLS.login, {
+      ...httpOptions,
+      params: { ...user }
+    })
+      .pipe(
+        map(CredentialUtils.createPublicKeyRequestOptions),
+        switchMap(CredentialUtils.$createLoginCredential),
+        switchMap(res => this.$loginCallback(res)),
+        take(1)
+      ).subscribe({
+        next: (token) => {
+          localStorage.setItem(TOKEN_KEY, token.token);
+          this.token.set(token.token);
+        },
+        error: console.error
+      })
   }
 
+  $loginCallback (credential: ILoginCredential) {
+    const body = new URLSearchParams({
+      webAuthnId: credential.id,
+      webAuthnRawId: credential.rawId,
+      webAuthnResponseClientDataJSON: credential.response.clientDataJSON,
+      webAuthnType: credential.type,
+      webAuthnResponseAuthenticatorData: credential.response.authenticatorData,
+      webAuthnResponseSignature: credential.response.signature,
+      webAuthnResponseUserHandle: credential.response.userHandle,
+    })
 
+    return this.http.post<TokensDto>(environment.api.url + WEBAUTHN_URLS.login2, body.toString(), {
+      ...httpOptions,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+  }
+
+  $registerCallback (credential: IRegisterCredential, username: string) {
+    const body = new URLSearchParams({
+      webAuthnId: credential.id,
+      webAuthnRawId: credential.rawId,
+      webAuthnResponseClientDataJSON: credential.response.clientDataJSON,
+      webAuthnType: credential.type,
+      webAuthnResponseAttestationObject: credential.response.attestationObject,
+      username,
+    })
+
+    return this.http.post<TokensDto>(environment.api.url + WEBAUTHN_URLS.register2, body.toString(), {
+      ...httpOptions,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+  }
+
+  logout() {
+
+  }
 }
 
-export const provideWebAuthn = (rotas: Routes) => ({
-  provide: ROTAS_TOKEN,
-  useValue: rotas
-})

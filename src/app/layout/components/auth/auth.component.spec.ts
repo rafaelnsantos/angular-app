@@ -2,20 +2,29 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AuthComponent } from './auth.component';
 import {SharedTestingModule} from "../../../../shared/shared-testing.module";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {WebAuthnService} from "../../../../shared/services/webauthn/web-authn.service";
 
 describe('SignupComponent', () => {
   let component: AuthComponent;
   let fixture: ComponentFixture<AuthComponent>;
+  let webAuthnService: jasmine.SpyObj<WebAuthnService>;
 
   beforeEach(async () => {
+    webAuthnService = jasmine.createSpyObj<WebAuthnService>([
+      'register',
+      'login'
+    ])
+
     await TestBed.configureTestingModule({
-      imports: [AuthComponent, SharedTestingModule],
+      imports: [AuthComponent, SharedTestingModule, HttpClientTestingModule],
+      providers: [
+        {provide: WebAuthnService, useValue: webAuthnService}
+      ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(AuthComponent);
-
-    fixture.componentRef.setInput('isSignup', false);
 
     component = fixture.componentInstance;
     await fixture.whenStable();
@@ -27,8 +36,8 @@ describe('SignupComponent', () => {
 
   it('should submit signup form', () => {
     // Arrange
-    fixture.componentRef.setInput('isSignup', true);
-    component.form.controls.email.setValue('asd@asd.com');
+    component.isRegister.set(true);
+    component.form.controls.username.setValue('asd@asd.com');
 
     // Act
     component.onSubmit();
@@ -39,7 +48,7 @@ describe('SignupComponent', () => {
 
   it('should submit signin form', () => {
     // Arrange
-    component.form.controls.email.setValue('asd@asd.com');
+    component.form.controls.username.setValue('asd@asd.com');
 
     // Act
     component.onSubmit();
@@ -50,7 +59,7 @@ describe('SignupComponent', () => {
 
   it('should not submit signup form', () => {
     // Arrange
-    fixture.componentRef.setInput('isSignup', true);
+    component.isRegister.set(true);
     component.onSubmit();
 
     // Assert
