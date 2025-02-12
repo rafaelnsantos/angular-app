@@ -1,4 +1,4 @@
-import {computed, inject, Injectable, signal} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import { map, switchMap, take} from "rxjs";
 import {
@@ -22,8 +22,6 @@ export interface TokensDto {
   refreshToken: string
 }
 
-const TOKEN_KEY = 'token'
-
 const WEBAUTHN_URLS = {
   register: '/q/webauthn/register-options-challenge',
   register2: '/q/webauthn/register',
@@ -38,11 +36,9 @@ const WEBAUTHN_URLS = {
 export class WebAuthnService {
   private readonly http = inject(HttpClient)
   readonly isAvailable = !!navigator.credentials && (!!navigator.credentials.create || !!navigator.credentials.get);
-  token = signal(localStorage.getItem(TOKEN_KEY))
-  isSignedIn = computed(() => !!this.token());
 
   register(user: Input) {
-    this.http.get(environment.api.url + WEBAUTHN_URLS.register, {
+    return this.http.get(environment.api.url + WEBAUTHN_URLS.register, {
       ...httpOptions,
       params: { ...user }
     }).pipe(
@@ -50,16 +46,11 @@ export class WebAuthnService {
       switchMap(CredentialUtils.$createRegisterCredential),
       switchMap((credential) => this.$registerCallback(credential, user.username)),
       take(1)
-    ).subscribe({
-      next: () => {
-        console.log("logado?")
-      },
-      error: console.error
-    })
+    )
   }
 
   login(user: Input) {
-    this.http.get(environment.api.url + WEBAUTHN_URLS.login, {
+    return this.http.get(environment.api.url + WEBAUTHN_URLS.login, {
       ...httpOptions,
       params: { ...user }
     })
@@ -68,12 +59,7 @@ export class WebAuthnService {
         switchMap(CredentialUtils.$createLoginCredential),
         switchMap(res => this.$loginCallback(res)),
         take(1)
-      ).subscribe({
-        next: () => {
-          console.log("logado?")
-        },
-        error: console.error
-      })
+      )
   }
 
   $loginCallback (credential: ILoginCredential) {
@@ -89,7 +75,8 @@ export class WebAuthnService {
   }
 
   logout() {
-
+    console.log(environment.api.url + WEBAUTHN_URLS.logout)
+    return this.http.get(environment.api.url + WEBAUTHN_URLS.logout, httpOptions)
   }
 }
 

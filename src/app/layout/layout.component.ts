@@ -7,8 +7,7 @@ import {RouterOutlet} from "@angular/router";
 import {LayoutService} from "./layout.service";
 import {DimensionsService} from "./dimensions.service";
 import {MatSidenavModule} from "@angular/material/sidenav";
-import {AuthComponent} from "./components/auth/auth.component";
-import {MatDialog} from "@angular/material/dialog";
+import {AuthService} from "./components/auth/auth.service";
 
 @Component({
   selector: 'app-layout',
@@ -24,18 +23,14 @@ import {MatDialog} from "@angular/material/dialog";
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements OnInit{
   layoutService = inject(LayoutService)
   dimensionsService = inject(DimensionsService)
-  dialogService = inject(MatDialog)
+  authService = inject(AuthService)
+
 
   ngOnInit(): void {
-    this.dialogService.open(AuthComponent, {
-      disableClose: false,
-      maxWidth: '400px',
-      width: '100%',
-      autoFocus: true,
-      hasBackdrop: true,
-    })
+    this.authService.start()
   }
+
 }

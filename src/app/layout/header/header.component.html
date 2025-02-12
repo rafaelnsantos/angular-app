@@ -4,8 +4,12 @@
     [isOpen]="layout2Service.sidebarLeftOpen()"
     [icon]="layout2Service.sidebarLeftIcon()"
   />
-  <span class="flex flex-1 pt-1">{{layout2Service.title()}}</span>
 
+  @if (authService.isLogged()) {
+    <span class="flex flex-1 pt-1">Hello {{authService.email()}}</span>
+    <span class="pr-5"></span>
+    <button (click)="authService.logout()">Log out</button>
+  }
   <app-toggle-sidebar-button
     (onButtonClick)="layout2Service.toggleSidebarRight()"
     [isOpen]="layout2Service.sidebarRightOpen()"

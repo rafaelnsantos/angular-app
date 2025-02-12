@@ -1,4 +1,4 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import { CommonModule } from "@angular/common";
 import {
   NonNullableFormBuilder,
@@ -12,7 +12,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import { WebAuthnService } from '../../../../shared/services/webauthn/web-authn.service';
+import {AuthService} from "./auth.service";
 
 @Component({
   selector: 'app-auth',
@@ -33,7 +33,7 @@ import { WebAuthnService } from '../../../../shared/services/webauthn/web-authn.
 })
 export class AuthComponent {
   private readonly formBuilder = inject(NonNullableFormBuilder)
-  private readonly webAuthnService = inject(WebAuthnService)
+  private authService = inject(AuthService)
 
   readonly isRegister = signal(false)
 
@@ -47,13 +47,10 @@ export class AuthComponent {
 
   onSubmit() {
     if (this.isRegister()) {
-      this.webAuthnService.register({
-        username: this.form.value.username!,
-      })
+      this.authService.register(this.form.value.username!)
+
     } else {
-      this.webAuthnService.login({
-        username: this.form.value.username!,
-      })
+      this.authService.login(this.form.value.username!)
     }
   }
 }
