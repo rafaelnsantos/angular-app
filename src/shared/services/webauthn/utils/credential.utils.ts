@@ -45,7 +45,7 @@ export class CredentialUtils {
         attestationObject: bufferToBase64(credential.response.attestationObject),
         clientDataJSON: bufferToBase64(credential.response.clientDataJSON)
       },
-      type: "public-key",
+      type: credential.type,
     }
   }
 

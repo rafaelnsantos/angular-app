@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   api: {
     url: "https://backend-fly-io-long-brook-7630.fly.dev",
   },

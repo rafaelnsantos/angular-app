@@ -1,4 +1,4 @@
-import {computed, effect, inject, Injectable, InjectionToken, signal} from '@angular/core';
+import {computed, inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import { map, switchMap, take} from "rxjs";
 import {
@@ -26,9 +26,9 @@ const TOKEN_KEY = 'token'
 
 const WEBAUTHN_URLS = {
   register: '/q/webauthn/register-options-challenge',
-  register2: '/webauthn/register',
+  register2: '/q/webauthn/register',
   login: '/q/webauthn/login-options-challenge',
-  login2: '/webauthn/login',
+  login2: '/q/webauthn/login',
   logout: '/q/webauthn/logout'
 }
 
@@ -51,9 +51,8 @@ export class WebAuthnService {
       switchMap((credential) => this.$registerCallback(credential, user.username)),
       take(1)
     ).subscribe({
-      next: (token) => {
-        localStorage.setItem(TOKEN_KEY, token.token);
-        this.token.set(token.token);
+      next: () => {
+        console.log("logado?")
       },
       error: console.error
     })
@@ -70,49 +69,23 @@ export class WebAuthnService {
         switchMap(res => this.$loginCallback(res)),
         take(1)
       ).subscribe({
-        next: (token) => {
-          localStorage.setItem(TOKEN_KEY, token.token);
-          this.token.set(token.token);
+        next: () => {
+          console.log("logado?")
         },
         error: console.error
       })
   }
 
   $loginCallback (credential: ILoginCredential) {
-    const body = new URLSearchParams({
-      webAuthnId: credential.id,
-      webAuthnRawId: credential.rawId,
-      webAuthnResponseClientDataJSON: credential.response.clientDataJSON,
-      webAuthnType: credential.type,
-      webAuthnResponseAuthenticatorData: credential.response.authenticatorData,
-      webAuthnResponseSignature: credential.response.signature,
-      webAuthnResponseUserHandle: credential.response.userHandle,
-    })
-
-    return this.http.post<TokensDto>(environment.api.url + WEBAUTHN_URLS.login2, body.toString(), {
-      ...httpOptions,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
+    return this.http.post(environment.api.url + WEBAUTHN_URLS.login2, credential, httpOptions)
   }
 
   $registerCallback (credential: IRegisterCredential, username: string) {
-    const body = new URLSearchParams({
-      webAuthnId: credential.id,
-      webAuthnRawId: credential.rawId,
-      webAuthnResponseClientDataJSON: credential.response.clientDataJSON,
-      webAuthnType: credential.type,
-      webAuthnResponseAttestationObject: credential.response.attestationObject,
+    const urlQuery = new URLSearchParams({
       username,
     })
 
-    return this.http.post<TokensDto>(environment.api.url + WEBAUTHN_URLS.register2, body.toString(), {
-      ...httpOptions,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
+    return this.http.post(environment.api.url + WEBAUTHN_URLS.register2 + '?' + urlQuery.toString(), credential, httpOptions)
   }
 
   logout() {
