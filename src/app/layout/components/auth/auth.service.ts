@@ -21,7 +21,7 @@ export class AuthService  {
   http = inject(HttpClient)
 
   start(): void {
-    this.http.get<{message: string} >(environment.api + "/auth/test", httpOptions).subscribe({
+    this.http.get<{message: string} >(environment.api.url + "/auth/test", httpOptions).subscribe({
       next: value => {
         this.email.set(value.message)
         this.dialogService.closeAll()
