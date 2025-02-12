@@ -3,6 +3,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {HttpClient} from "@angular/common/http";
 import {AuthComponent} from "./auth.component";
 import {WebAuthnService} from "../../../../shared/services/webauthn/web-authn.service";
+import {environment} from "../../../../environments/environment";
 
 const httpOptions = {
   withCredentials: true,
@@ -20,7 +21,7 @@ export class AuthService  {
   http = inject(HttpClient)
 
   start(): void {
-    this.http.get<{message: string} >("http://localhost:8080/auth/test", httpOptions).subscribe({
+    this.http.get<{message: string} >(environment.api + "/auth/test", httpOptions).subscribe({
       next: value => {
         this.email.set(value.message)
         this.dialogService.closeAll()
