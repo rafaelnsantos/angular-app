@@ -7,7 +7,6 @@ import {RouterOutlet} from "@angular/router";
 import {LayoutService} from "./layout.service";
 import {DimensionsService} from "./dimensions.service";
 import {MatSidenavModule} from "@angular/material/sidenav";
-import {AuthService} from "./components/auth/auth.service";
 
 @Component({
   selector: 'app-layout',
@@ -23,14 +22,7 @@ import {AuthService} from "./components/auth/auth.service";
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
 })
-export class LayoutComponent implements OnInit{
+export class LayoutComponent {
   layoutService = inject(LayoutService)
   dimensionsService = inject(DimensionsService)
-  authService = inject(AuthService)
-
-
-  ngOnInit(): void {
-    this.authService.start()
-  }
-
 }

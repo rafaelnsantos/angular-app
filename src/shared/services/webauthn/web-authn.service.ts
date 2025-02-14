@@ -43,8 +43,8 @@ export class WebAuthnService {
       params: { ...user }
     }).pipe(
       map(CredentialUtils.createPublicKey),
-      switchMap(CredentialUtils.$createRegisterCredential),
-      switchMap((credential) => this.$registerCallback(credential, user.username)),
+      switchMap(CredentialUtils.createRegisterCredential$),
+      switchMap((credential) => this.registerCallback$(credential, user.username)),
       take(1)
     )
   }
@@ -56,17 +56,17 @@ export class WebAuthnService {
     })
       .pipe(
         map(CredentialUtils.createPublicKeyRequestOptions),
-        switchMap(CredentialUtils.$createLoginCredential),
-        switchMap(res => this.$loginCallback(res)),
+        switchMap(CredentialUtils.createLoginCredential$),
+        switchMap(credential => this.loginCallback$(credential)),
         take(1)
       )
   }
 
-  $loginCallback (credential: ILoginCredential) {
+  loginCallback$ (credential: ILoginCredential) {
     return this.http.post(environment.api.url + WEBAUTHN_URLS.login2, credential, httpOptions)
   }
 
-  $registerCallback (credential: IRegisterCredential, username: string) {
+  registerCallback$ (credential: IRegisterCredential, username: string) {
     const urlQuery = new URLSearchParams({
       username,
     })

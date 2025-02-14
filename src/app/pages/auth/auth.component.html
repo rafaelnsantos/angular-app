@@ -1,0 +1,56 @@
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <div class="h-screen flex flex-col justify-center px-4">
+
+      <div class="flex flex-row justify-between items-center self-center">
+        <h2 mat-dialog-title>
+          @if (isRegister()) {
+            Register
+          } @else {
+            Login
+          }
+        </h2>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="flex pt-12">
+          <mat-form-field class="w-screen">
+            <mat-label>Email</mat-label>
+            <input matInput [formControl]="form.controls.username" name="username"/>
+            <mat-error *ngIf="form.controls.username.hasError('required')">
+              Email is required
+            </mat-error>
+            <mat-error *ngIf="form.controls.username.hasError('email')">
+              Email is invalid
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="flex justify-end mt-10">
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="form.invalid"
+            class="w-8/12 !h-14"
+          >
+            @if (isRegister()) {
+              Register
+            } @else {
+              Login
+            }
+          </button>
+        </div>
+      </form>
+
+      <button type="button" class="top-10 !h-12 self-end" mat-button (click)="onClickToggleSign()">
+        Click here to
+        @if (isRegister()) {
+          login
+        } @else {
+          register
+        }
+      </button>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

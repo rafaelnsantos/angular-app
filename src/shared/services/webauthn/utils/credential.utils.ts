@@ -20,7 +20,6 @@ export interface ILoginCredential extends Credential {
 }
 
 export class CredentialUtils {
-  @LogInputOutput
   static createLoginCretential (credential: any): ILoginCredential {
     return {
       id: credential.id,
@@ -36,7 +35,6 @@ export class CredentialUtils {
   }
 
 
-  @LogInputOutput
   static createRegisterCredential (credential: any): IRegisterCredential {
     return {
       id: credential.id,
@@ -49,27 +47,24 @@ export class CredentialUtils {
     }
   }
 
-  @LogInputOutput
-  static $createRegisterCredential(publicKey: CredentialCreationOptions['publicKey']): Observable<IRegisterCredential> {
+  static createRegisterCredential$(publicKey: CredentialCreationOptions['publicKey']): Observable<IRegisterCredential> {
     return new Observable((observer) => {
       navigator.credentials.create({ publicKey })
         .then((response) => observer.next(CredentialUtils.createRegisterCredential(response)))
         .catch(observer.error)
-        .finally(observer.complete);
+        .finally(() => observer.complete());
     })
   }
 
-  @LogInputOutput
-  static $createLoginCredential(publicKey: PublicKeyCredentialRequestOptions): Observable<ILoginCredential>{
+  static createLoginCredential$(publicKey: PublicKeyCredentialRequestOptions): Observable<ILoginCredential>{
     return new Observable((observer) => {
       navigator.credentials.get({ publicKey })
         .then((response) => observer.next(CredentialUtils.createLoginCretential(response)))
         .catch(observer.error)
-        .finally(observer.complete);
+        .finally(() => observer.complete());
     })
   }
 
-  @LogInputOutput
   static createPublicKey (response: any): CredentialCreationOptions['publicKey'] {
     response.challenge = decodeBase64Url(response.challenge)
     response.user.id = decodeBase64Url(response.user.id)
@@ -77,7 +72,6 @@ export class CredentialUtils {
   }
 
 
-  @LogInputOutput
   static createPublicKeyRequestOptions (res: any): PublicKeyCredentialRequestOptions {
     res.challenge = decodeBase64Url(res.challenge);
     if (res.allowCredentials) {

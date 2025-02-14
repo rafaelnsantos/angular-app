@@ -13,6 +13,7 @@ import { MatIconModule } from "@angular/material/icon";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {AuthService} from "./auth.service";
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 @Component({
   selector: 'app-auth',
@@ -27,6 +28,7 @@ import {AuthService} from "./auth.service";
     MatIconModule,
     MatDialogModule,
     MatSlideToggleModule,
+    MatSidenavModule,
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss'

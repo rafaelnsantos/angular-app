@@ -1,17 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AuthComponent } from './auth.component';
-import {SharedTestingModule} from "../../../../shared/shared-testing.module";
+import {SharedTestingModule} from "../../../shared/shared-testing.module";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {WebAuthnService} from "../../../../shared/services/webauthn/web-authn.service";
+import {WebAuthnService} from "../../../shared/services/webauthn/web-authn.service";
+import {AuthService} from "./auth.service";
 
-describe('SignupComponent', () => {
+describe('AuthComponent', () => {
   let component: AuthComponent;
   let fixture: ComponentFixture<AuthComponent>;
-  let webAuthnService: jasmine.SpyObj<WebAuthnService>;
+  let authService: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
-    webAuthnService = jasmine.createSpyObj<WebAuthnService>([
+    authService = jasmine.createSpyObj<AuthService>([
       'register',
       'login'
     ])
@@ -19,7 +20,7 @@ describe('SignupComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AuthComponent, SharedTestingModule, HttpClientTestingModule],
       providers: [
-        {provide: WebAuthnService, useValue: webAuthnService}
+        {provide: AuthService, useValue: authService}
       ]
     })
     .compileComponents();

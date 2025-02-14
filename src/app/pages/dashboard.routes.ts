@@ -11,6 +11,6 @@ export const dashboardRoutes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: 'not-found',
   }
 ];
