@@ -2,6 +2,10 @@
   <mat-sidenav-content>
     <div class="h-screen flex flex-col justify-center px-4">
 
+      @if(!authService.webAuthnService.isAvailable()) {
+        Webauthn not available! Check webauthn.io
+      }
+
       <div class="flex flex-row justify-between items-center self-center">
         <h2 mat-dialog-title>
           @if (isRegister()) {

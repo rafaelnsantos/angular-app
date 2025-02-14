@@ -35,7 +35,10 @@ const WEBAUTHN_URLS = {
 })
 export class WebAuthnService {
   private readonly http = inject(HttpClient)
-  readonly isAvailable = !!navigator.credentials && (!!navigator.credentials.create || !!navigator.credentials.get);
+
+  isAvailable() {
+    return !!navigator.credentials && (!!navigator.credentials.create || !!navigator.credentials.get);
+  }
 
   register(user: Input) {
     return this.http.get(environment.api.url + WEBAUTHN_URLS.register, {

@@ -7,7 +7,7 @@ import {PAGES} from "../../pages";
   providedIn: "root"
 })
 export class AuthService  {
-  private webAuthnService = inject(WebAuthnService)
+  webAuthnService = inject(WebAuthnService)
   private router = inject(Router)
 
   readonly navigateTo = signal<string>('app/home')

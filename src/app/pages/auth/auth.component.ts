@@ -35,7 +35,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 })
 export class AuthComponent {
   private readonly formBuilder = inject(NonNullableFormBuilder)
-  private authService = inject(AuthService)
+  authService = inject(AuthService)
 
   readonly isRegister = signal(false)
 
