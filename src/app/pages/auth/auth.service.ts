@@ -2,17 +2,20 @@ import {inject, Injectable, signal} from "@angular/core";
 import {WebAuthnService} from "../../../shared/services/webauthn/web-authn.service";
 import {Router} from "@angular/router";
 import {PAGES} from "../../pages";
+import {catchError, Observable, of, tap, throwError} from "rxjs";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: "root"
 })
-export class AuthService  {
+export class AuthService {
   webAuthnService = inject(WebAuthnService)
   private router = inject(Router)
+  private snackBar = inject(MatSnackBar)
 
   readonly navigateTo = signal<string>('app/home')
 
-  isLogged () {
+  isLogged() {
     return !!sessionStorage.getItem('isLogged')
   }
 
@@ -23,21 +26,35 @@ export class AuthService  {
     })
   }
 
-  private onLogout () {
+  private onLogout() {
     sessionStorage.removeItem('isLogged')
     this.router.navigate(PAGES.LANDING)
   }
 
-  register(username: string) {
-    this.webAuthnService.register({
+  register$(username: string) {
+    return this.addPipe(this.webAuthnService.register({
       username,
-    }).subscribe(() => this.goToApp())
+    }))
   }
 
-  login(username: string) {
-  this.webAuthnService.login({
+  login$(username: string) {
+    return this.addPipe(this.webAuthnService.login({
       username,
-    }).subscribe(() => this.goToApp())
+    }))
+  }
+
+  private addPipe(observable: Observable<any>) {
+    return observable.pipe(
+      tap(() => {
+        this.goToApp()
+      }),
+      catchError((err, a) => {
+        this.snackBar.open((err.message as string).substring(0, 56), 'close', {
+          duration: 5000,
+        })
+        return throwError(() => err)
+      })
+    )
   }
 
   private goToApp() {

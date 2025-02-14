@@ -13,8 +13,8 @@ describe('AuthComponent', () => {
 
   beforeEach(async () => {
     authService = jasmine.createSpyObj<AuthService>([
-      'register',
-      'login'
+      'register$',
+      'login$'
     ])
 
     await TestBed.configureTestingModule({

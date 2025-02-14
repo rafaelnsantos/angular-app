@@ -76,7 +76,6 @@ export class WebAuthnService {
   }
 
   logout() {
-    console.log(environment.api.url + WEBAUTHN_URLS.logout)
     return this.http.get(environment.api.url + WEBAUTHN_URLS.logout, httpOptions)
   }
 }

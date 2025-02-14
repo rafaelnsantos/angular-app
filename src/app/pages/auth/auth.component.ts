@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, effect, inject, signal} from '@angular/core';
 import { CommonModule } from "@angular/common";
 import {
   NonNullableFormBuilder,
@@ -39,8 +39,16 @@ export class AuthComponent {
 
   readonly isRegister = signal(false)
 
+  validatorsEffect = effect(() => {
+    const oldValue = this.form.controls.username.value
+    const validators = this.isRegister() ? [Validators.required, Validators.email] : []
+    this.form.controls.username.setValidators(validators)
+    this.form.controls.username.reset()
+    this.form.controls.username.setValue(oldValue)
+  })
+
   readonly form = this.formBuilder.group({
-    username: ['', [Validators.required, Validators.email]],
+    username: '',
   })
 
   onClickToggleSign() {
@@ -49,10 +57,10 @@ export class AuthComponent {
 
   onSubmit() {
     if (this.isRegister()) {
-      this.authService.register(this.form.value.username!)
+      this.authService.register$(this.form.value.username!).subscribe()
 
     } else {
-      this.authService.login(this.form.value.username!)
+      this.authService.login$('').subscribe()
     }
   }
 }
