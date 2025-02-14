@@ -12,15 +12,20 @@ export class AuthService  {
 
   readonly navigateTo = signal<string>('app/home')
 
-  isLogged() {
-    return !!document.cookie.match(/^(.*;)?\s*quarkus-credential\s*=\s*[^;]+(.*)?$/)
+  isLogged () {
+    return !!sessionStorage.getItem('isLogged')
   }
 
   logout() {
     this.webAuthnService.logout().subscribe({
-      error: () => this.router.navigate(PAGES.LANDING),
-      complete: () => this.router.navigate(PAGES.LANDING)
+      error: () => this.onLogout(),
+      complete: () => this.onLogout()
     })
+  }
+
+  private onLogout () {
+    sessionStorage.removeItem('isLogged')
+    this.router.navigate(PAGES.LANDING)
   }
 
   register(username: string) {
@@ -36,6 +41,7 @@ export class AuthService  {
   }
 
   private goToApp() {
+    sessionStorage.setItem('isLogged', 'true')
     this.router.navigate([this.navigateTo()])
   }
 }
