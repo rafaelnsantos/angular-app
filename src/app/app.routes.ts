@@ -14,13 +14,11 @@ export const routes: Routes = [
   {
     path: 'login',
     component: AuthComponent,
-    canActivate: [loginGuard]
   },
   {
     path: 'app',
     component: LayoutComponent,
     children: dashboardRoutes,
-    canActivate: [appGuard],
   },
   {
     path: 'not-found',
