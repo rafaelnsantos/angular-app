@@ -1,31 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AuthComponent } from './auth.component';
+import { RegisterComponent } from './register.component';
 import {SharedTestingModule} from "../../../shared/shared-testing.module";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {WebAuthnService} from "../../../shared/services/webauthn/web-authn.service";
-import {AuthService} from "./auth.service";
+import {AuthService} from "../../../shared/services/auth/auth.service";
+import {of} from "rxjs";
 
 describe('AuthComponent', () => {
-  let component: AuthComponent;
-  let fixture: ComponentFixture<AuthComponent>;
+  let component: RegisterComponent;
+  let fixture: ComponentFixture<RegisterComponent>;
   let authService: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
     authService = jasmine.createSpyObj<AuthService>([
       'register$',
-      'login$'
     ])
 
     await TestBed.configureTestingModule({
-      imports: [AuthComponent, SharedTestingModule, HttpClientTestingModule],
+      imports: [RegisterComponent, SharedTestingModule, HttpClientTestingModule],
       providers: [
         {provide: AuthService, useValue: authService}
       ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AuthComponent);
+    authService.register$.and.callFake(() => of())
+
+    fixture = TestBed.createComponent(RegisterComponent);
 
     component = fixture.componentInstance;
     await fixture.whenStable();
@@ -37,7 +38,6 @@ describe('AuthComponent', () => {
 
   it('should submit signup form', () => {
     // Arrange
-    component.isRegister.set(true);
     component.form.controls.username.setValue('asd@asd.com');
 
     // Act
@@ -45,26 +45,6 @@ describe('AuthComponent', () => {
 
     // Assert
     expect(component.form.valid).toBeTrue();
-  })
-
-  it('should submit signin form', () => {
-    // Arrange
-    component.form.controls.username.setValue('asd@asd.com');
-
-    // Act
-    component.onSubmit();
-
-    // Assert
-    expect(component.form.valid).toBeTrue();
-  })
-
-  it('should not submit signup form', () => {
-    // Arrange
-    component.isRegister.set(true);
-    component.onSubmit();
-
-    // Assert
-    expect(component.form.valid).toBeFalse();
   })
 
 });

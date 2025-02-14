@@ -20,7 +20,7 @@ export interface ILoginCredential extends Credential {
 }
 
 export class CredentialUtils {
-  static createLoginCretential (credential: any): ILoginCredential {
+  private static createLoginCretential (credential: any): ILoginCredential {
     return {
       id: credential.id,
       rawId: bufferToBase64(credential.rawId),
@@ -35,7 +35,7 @@ export class CredentialUtils {
   }
 
 
-  static createRegisterCredential (credential: any): IRegisterCredential {
+  private static createRegisterCredential (credential: any): IRegisterCredential {
     return {
       id: credential.id,
       rawId: bufferToBase64(credential.rawId),

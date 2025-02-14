@@ -8,7 +8,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {
   ToggleSidebarButtonComponent
 } from "../components/toggle-sidebar-button/toggle-sidebar-button.component";
-import {AuthService} from "../../pages/auth/auth.service";
+import {AuthService} from "../../../shared/services/auth/auth.service";
 
 @Component({
   selector: 'app-header',

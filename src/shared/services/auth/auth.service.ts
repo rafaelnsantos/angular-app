@@ -1,7 +1,7 @@
 import {inject, Injectable, signal} from "@angular/core";
-import {WebAuthnService} from "../../../shared/services/webauthn/web-authn.service";
+import {WebAuthnService} from "../webauthn/web-authn.service";
 import {Router} from "@angular/router";
-import {PAGES} from "../../pages";
+import {PAGES} from "../../../app/pages";
 import {catchError, Observable, tap, throwError} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
@@ -48,7 +48,7 @@ export class AuthService {
       tap(() => {
         this.goToApp()
       }),
-      catchError((err, a) => {
+      catchError((err) => {
         this.snackBar.open((err.message as string).substring(0, 56), 'X', {
           duration: 5000,
         })

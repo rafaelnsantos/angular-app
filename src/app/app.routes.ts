@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import {dashboardRoutes} from "./pages/dashboard.routes";
 import {LayoutComponent} from "./layout/layout.component";
-import {AuthComponent} from "./pages/auth/auth.component";
+import {RegisterComponent} from "./pages/register/register.component";
 import {appGuard} from "./app.guard";
-import {loginGuard} from "./login.guard";
+import {registerGuard} from "./pages/register/register.guard";
 import {LandingPageComponent} from "./pages/landing-page/landing-page.component";
 
 export const routes: Routes = [
@@ -12,9 +12,9 @@ export const routes: Routes = [
     component: LandingPageComponent,
   },
   {
-    path: 'login',
-    component: AuthComponent,
-    canActivate: [loginGuard]
+    path: 'register',
+    component: RegisterComponent,
+    canActivate: [registerGuard]
   },
   {
     path: 'app',

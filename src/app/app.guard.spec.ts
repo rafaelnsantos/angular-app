@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {CanActivateFn, Router} from '@angular/router';
 
 import { appGuard } from './app.guard';
-import {AuthService} from "./pages/auth/auth.service";
+import {AuthService} from "../shared/services/auth/auth.service";
 import {PAGES} from "./pages";
 
 describe('appGuard', () => {

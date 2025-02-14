@@ -1,0 +1,48 @@
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <div class="h-dvh flex flex-col justify-between px-4 pb-8 pt-12">
+
+      <h1 mat-dialog-title>
+        Register
+      </h1>
+
+      @if(!authService.webAuthnService.isAvailable()) {
+        <mat-card>
+          <mat-card-content>Webauthn not available! Check webauthn.io</mat-card-content>
+        </mat-card>
+      }
+      <div class="flex flex-1"></div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <div class="flex">
+          <mat-form-field class="w-screen">
+            <mat-label>Email</mat-label>
+            <input matInput [formControl]="form.controls.username" name="username" autocomplete="email webauthn"/>
+            <mat-error *ngIf="form.controls.username.hasError('required')">
+              Email is required
+            </mat-error>
+            <mat-error *ngIf="form.controls.username.hasError('email')">
+              Email is invalid
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="form.invalid"
+          class="flex self-center w-8/12 !h-14"
+        >
+          Register
+        </button>
+      </form>
+
+      <div class="h-1/3"></div>
+
+      <button routerLink="" type="button" class="self-end" mat-button>
+        Go back
+      </button>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

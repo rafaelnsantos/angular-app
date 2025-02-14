@@ -1,8 +1,14 @@
 <mat-sidenav-container>
   <mat-sidenav-content>
-    <div class="h-dvh flex flex-col justify-center items-center">
-      <a routerLink="login">login</a>
+    <div class="h-dvh flex justify-between px-2 py-4">
+      <div class="flex w-full justify-end items-center gap-8 h-fit pr-4">
+        <button type="button" mat-flat-button (click)="handleLogin()">
+          Login
+        </button>
+        <a routerLink="register" type="button">
+          Register
+        </a>
+      </div>
     </div>
-
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,4 +1,4 @@
-import {Component, effect, inject, signal} from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import {
   NonNullableFormBuilder,
@@ -12,8 +12,9 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import {AuthService} from "./auth.service";
+import {AuthService} from "../../../shared/services/auth/auth.service";
 import {MatSidenavModule} from "@angular/material/sidenav";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-auth',
@@ -29,38 +30,20 @@ import {MatSidenavModule} from "@angular/material/sidenav";
     MatDialogModule,
     MatSlideToggleModule,
     MatSidenavModule,
+    RouterLink,
   ],
-  templateUrl: './auth.component.html',
-  styleUrl: './auth.component.scss'
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss'
 })
-export class AuthComponent {
+export class RegisterComponent {
   private readonly formBuilder = inject(NonNullableFormBuilder)
   authService = inject(AuthService)
 
-  readonly isRegister = signal(false)
-
-  validatorsEffect = effect(() => {
-    const oldValue = this.form.controls.username.value
-    const validators = this.isRegister() ? [Validators.required, Validators.email] : []
-    this.form.controls.username.setValidators(validators)
-    this.form.controls.username.reset()
-    this.form.controls.username.setValue(oldValue)
-  })
-
   readonly form = this.formBuilder.group({
-    username: '',
+    username: ['', [Validators.required, Validators.email]],
   })
-
-  onClickToggleSign() {
-    this.isRegister.update(prev => !prev)
-  }
 
   onSubmit() {
-    if (this.isRegister()) {
-      this.authService.register$(this.form.value.username!).subscribe()
-
-    } else {
-      this.authService.login$('').subscribe()
-    }
+    this.authService.register$(this.form.value.username!).subscribe()
   }
 }
