@@ -1,5 +1,4 @@
 import {inject, Injectable, signal} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
 import {WebAuthnService} from "../../../shared/services/webauthn/web-authn.service";
 import {Router} from "@angular/router";
 import {PAGES} from "../../pages";
@@ -10,7 +9,6 @@ import {PAGES} from "../../pages";
 export class AuthService  {
   private webAuthnService = inject(WebAuthnService)
   private router = inject(Router)
-  private http = inject(HttpClient)
 
   readonly navigateTo = signal<string>('app/home')
 
@@ -32,7 +30,7 @@ export class AuthService  {
   }
 
   login(username: string) {
-    this.webAuthnService.login({
+  this.webAuthnService.login({
       username,
     }).subscribe(() => this.goToApp())
   }

@@ -45,7 +45,6 @@ export class WebAuthnService {
       map(CredentialUtils.createPublicKey),
       switchMap(CredentialUtils.createRegisterCredential$),
       switchMap((credential) => this.registerCallback$(credential, user.username)),
-      take(1)
     )
   }
 
@@ -58,7 +57,6 @@ export class WebAuthnService {
         map(CredentialUtils.createPublicKeyRequestOptions),
         switchMap(CredentialUtils.createLoginCredential$),
         switchMap(credential => this.loginCallback$(credential)),
-        take(1)
       )
   }
 
