@@ -15,6 +15,8 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {AuthService} from "../../../shared/services/auth/auth.service";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {RouterLink} from "@angular/router";
+import {MatProgressBar} from "@angular/material/progress-bar";
+import {LoadingService} from "../../../shared/services/loading/loading.service";
 
 @Component({
   selector: 'app-auth',
@@ -31,6 +33,7 @@ import {RouterLink} from "@angular/router";
     MatSlideToggleModule,
     MatSidenavModule,
     RouterLink,
+    MatProgressBar,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
@@ -38,6 +41,7 @@ import {RouterLink} from "@angular/router";
 export class RegisterComponent {
   private readonly formBuilder = inject(NonNullableFormBuilder)
   authService = inject(AuthService)
+  loadingService = inject(LoadingService)
 
   readonly form = this.formBuilder.group({
     username: ['', [Validators.required, Validators.email]],

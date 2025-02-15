@@ -1,7 +1,12 @@
 <mat-sidenav-container>
   <mat-sidenav-content>
+    <div class="h-1">
+      @if(loadingService.isLoading()) {
+        <mat-progress-bar mode="indeterminate" />
+      }
+    </div>
     <div class="h-dvh flex justify-between px-2 py-4">
-      <div class="flex w-full justify-end items-center gap-8 h-fit pr-4">
+      <div class="flex w-full justify-end items-center gap-12 h-fit pr-8">
         <button type="button" mat-flat-button (click)="handleLogin()">
           Login
         </button>

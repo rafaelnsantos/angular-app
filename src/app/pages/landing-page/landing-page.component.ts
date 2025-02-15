@@ -1,8 +1,10 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {RouterLink} from "@angular/router";
 import {MatButton} from "@angular/material/button";
 import {AuthService} from "../../../shared/services/auth/auth.service";
+import {MatProgressBar} from "@angular/material/progress-bar";
+import {LoadingService} from "../../../shared/services/loading/loading.service";
 
 @Component({
   selector: 'app-landing-page',
@@ -10,7 +12,8 @@ import {AuthService} from "../../../shared/services/auth/auth.service";
   imports: [
     MatSidenavModule,
     RouterLink,
-    MatButton
+    MatButton,
+    MatProgressBar
   ],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss'
@@ -18,6 +21,7 @@ import {AuthService} from "../../../shared/services/auth/auth.service";
 export class LandingPageComponent {
 
   authService = inject(AuthService)
+  loadingService = inject(LoadingService)
 
   handleLogin() {
     this.authService.login$('').subscribe()
