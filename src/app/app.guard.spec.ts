@@ -44,6 +44,6 @@ describe('appGuard', () => {
 
     const res = executeGuard({} as any, {} as any)
     expect(res).toBeFalse()
-    expect(router.navigate).toHaveBeenCalledOnceWith(PAGES.HOME_APP)
+    expect(router.navigate).toHaveBeenCalledOnceWith(PAGES.LANDING)
   })
 });

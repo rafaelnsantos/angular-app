@@ -15,7 +15,7 @@ export const appGuard: CanActivateFn = (route, state) => {
     authService.navigateTo.set(state.url)
   }
 
-  router.navigate(PAGES.HOME_APP)
+  router.navigate(PAGES.LANDING)
   return false;
 };
 
