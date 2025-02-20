@@ -5,14 +5,22 @@
         <mat-progress-bar mode="indeterminate" />
       }
     </div>
-    <div class="h-dvh flex justify-between px-2 py-4">
-      <div class="flex w-full justify-end items-center gap-12 h-fit pr-8">
+    <div class="h-dvh flex flex-col px-2 py-4 gap-4">
+      <div class="flex w-full justify-end items-center gap-12 h-fit pr-8 grow-0">
         <button type="button" mat-flat-button (click)="handleLogin()">
           Login
         </button>
         <a routerLink="register" type="button">
           Register
         </a>
+      </div>
+      
+      <div class="flex justify-center mt-8 gap-2">
+        <button (click)="getPrev()"><</button>
+        <div role="listbox" class="w-full md:w-2/3">
+          <img  [src]="getSlide()" alt="slide" >
+        </div>
+        <button (click)="getNext()">></button>
       </div>
     </div>
   </mat-sidenav-content>
